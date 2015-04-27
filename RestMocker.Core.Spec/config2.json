@@ -1,0 +1,7 @@
+﻿[
+    {
+        "Name": "test1",
+        "Resource": "test1/data",
+        "Method": "get"
+    }
+]

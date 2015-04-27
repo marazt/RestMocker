@@ -1,0 +1,38 @@
+﻿[
+    {
+        "Name": "test1",
+        "Resource": "test1",
+        "Method": "get",
+        "MinDelay": 5000,
+        "Response": {
+            "Json": { "response": "Hi 1!" },
+            "Headers": { "header1": "value1" },
+            "StatusCode": 200
+        }
+
+    },
+    {
+        "Name": "test2",
+        "Resource": "test2",
+        "Method": "get",
+        "MinDelay": 5,
+        "Response": {
+            "Json": { "response": "Hi 2!" },
+            "Headers": { "header1": "value1" },
+            "StatusCode": 200
+        }
+
+    },
+    {
+        "Name": "test3",
+        "Resource": "test3",
+        "Method": "post",
+        "MinDelay": 5,
+        "Response": {
+            "Json": { "response": "Hi 3!" },
+            "Headers": { "header1": "value1" },
+            "StatusCode": 200
+        }
+
+    }
+]
