@@ -27,7 +27,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Get()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
@@ -46,7 +46,26 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Post()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+
+            // Assert
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.InternalServerError);
+            response.Headers.Count().ShouldBeEquivalentTo(0);
+            var data = response.Content.ReadAsStringAsync().Result;
+            data.ShouldBeEquivalentTo(expectedData);
+        }
+
+        [Fact]
+        public void ShouldTestPatchMethod()
+        {
+            // Arrange
+            const string url = "http://www.contoso.com/bagr/test/11";
+            var controller = this.GetTestController(url, HttpMethodEnum.Patch);
+            const string expectedData = "{\"value2\":\"val6\"}";
+            this.SetConfigurations();
+
+            // Act
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.InternalServerError);
@@ -65,7 +84,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Put()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.BadRequest);
@@ -84,12 +103,51 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Delete()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Accepted);
             response.Headers.Count().ShouldBeEquivalentTo(1);
             response.Headers.GetValues("header4").ElementAt(0).ShouldBeEquivalentTo("value4");
+            var data = response.Content.ReadAsStringAsync().Result;
+            data.ShouldBeEquivalentTo(expectedData);
+        }
+
+        [Fact]
+        public void ShouldTestHeadMethod()
+        {
+            // Arrange
+            const string url = "http://www.contoso.com/bagr";
+            var controller = this.GetTestController(url, HttpMethodEnum.Head);
+            const string expectedData = "{}";
+            this.SetConfigurations();
+
+            // Act
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+
+            // Assert
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
+            response.Headers.Count().ShouldBeEquivalentTo(1);
+            response.Headers.GetValues("Encoding").ElementAt(0).ShouldBeEquivalentTo("utf-8");
+            var data = response.Content.ReadAsStringAsync().Result;
+            data.ShouldBeEquivalentTo(expectedData);
+        }
+
+        [Fact]
+        public void ShouldTestOptionsMethod()
+        {
+            // Arrange
+            const string url = "http://www.contoso.com/bagr";
+            var controller = this.GetTestController(url, HttpMethodEnum.Options);
+            const string expectedData = "{\"key\":\"654\"}";
+            this.SetConfigurations();
+
+            // Act
+            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+
+            // Assert
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.Headers.Count().ShouldBeEquivalentTo(0);
             var data = response.Content.ReadAsStringAsync().Result;
             data.ShouldBeEquivalentTo(expectedData);
         }
@@ -103,7 +161,7 @@ namespace RestMocker.Core.Spec.Controllers
             confMock.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Get,
-                Name = "test1",
+                Name = "GetTest",
                 Resource = "bagr/test/8",
                 Response = new ResponseItem
                 {
@@ -115,7 +173,7 @@ namespace RestMocker.Core.Spec.Controllers
             new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Post,
-                Name = "test2",
+                Name = "PostTest",
                 Resource = "bagr/test/{id}",
                 Response = new ResponseItem
                 {
@@ -127,7 +185,7 @@ namespace RestMocker.Core.Spec.Controllers
             new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Put,
-                Name = "test3",
+                Name = "PutTest",
                 Resource = "bagr/test/{hash}/item",
                 Response = new ResponseItem
                 {
@@ -139,13 +197,49 @@ namespace RestMocker.Core.Spec.Controllers
             new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Delete,
-                Name = "test4",
+                Name = "DeleteTest",
                 Resource = "bagr",
                 Response = new ResponseItem
                 {
                     Headers = new Dictionary<string, string> { { "header4", "value4" } },
                     Json = new Dictionary<string, string> { { "value5", "val5" }, { "value6", "val6" } },
                     StatusCode = HttpStatusCode.Accepted
+                }
+            },
+            new JsonConfigurationItem
+            {
+                Method = HttpMethodEnum.Patch,
+                Name = "PatchTest",
+                Resource = "bagr/test/{id}",
+                Response = new ResponseItem
+                {
+                    Headers = new Dictionary<string, string> { { "Content-type", "application/json" } },
+                    Json = new Dictionary<string, string> { { "value2", "val6" } },
+                    StatusCode = HttpStatusCode.InternalServerError
+                }
+            },
+            new JsonConfigurationItem
+            {
+                Method = HttpMethodEnum.Head,
+                Name = "HeadTest",
+                Resource = "bagr",
+                Response = new ResponseItem
+                {
+                    Headers = new Dictionary<string, string> { { "Encoding", "utf-8" } },
+                    Json = new Dictionary<string, string> (),
+                    StatusCode = HttpStatusCode.NotFound
+                }
+            },
+            new JsonConfigurationItem
+            {
+                Method = HttpMethodEnum.Options,
+                Name = "OptionsTest",
+                Resource = "bagr",
+                Response = new ResponseItem
+                {
+                    Headers = new Dictionary<string, string> (),
+                    Json = new Dictionary<string, string> { { "key", "654" } },
+                    StatusCode = HttpStatusCode.OK
                 }
             }
             });

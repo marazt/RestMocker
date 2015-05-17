@@ -22,5 +22,18 @@ namespace RestMocker.Core.Models
         /// The delete
         /// </summary>
         public const string Delete = "delete";
+
+        /// <summary>
+        /// The patch
+        /// </summary>
+        public const string Patch = "patch";
+        /// <summary>
+        /// The head
+        /// </summary>
+        public const string Head = "head";
+        /// <summary>
+        /// The options
+        /// </summary>
+        public const string Options = "options";
     }
 }

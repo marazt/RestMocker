@@ -1,5 +1,34 @@
-RestMocker v1.0.0.0
+RestMocker
 ==================
+
+Version 1.0.1
+
+Author marazt
+
+Copyright marazt
+
+License The MIT License (MIT)
+
+Last updated 17 May 2015
+
+
+Versions
+-----------------
+
+**1.0.1 - 2015/05/17**
+
+* Added handling for Patch, Head and Options HTTP methods
+* Refactoring of the controller handling
+
+
+
+**1.0.0 - 2015/04/29**
+
+* Initial version
+
+
+About
+-----------------
 
 RestMocker is a simple server for mocking (simulating) REST APIs for your applications.
 It can be run on local machine as console application on it can be deployed into the Azure Cloud.

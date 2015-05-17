@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Newtonsoft.Json;
+using RestMocker.Core.Models;
 
 namespace RestMocker.Core.Controllers
 {
@@ -15,46 +16,14 @@ namespace RestMocker.Core.Controllers
         #region Methods
 
         /// <summary>
-        /// Gets this instance.
+        /// Method which handles all incomming request and resolves which
+        /// response will be returned to the client.
+        /// It accepts 'all' common HTTP methods
         /// </summary>
         /// <returns>HttpResponseMessage instance</returns>
-        public async Task<IHttpActionResult> Get()
-        {
-            return await this.GetResponse();
-        }
-
-        /// <summary>
-        /// Posts this instance.
-        /// </summary>
-        /// <returns>HttpResponseMessage instance</returns>
-        public async Task<IHttpActionResult> Post()
-        {
-            return await this.GetResponse();
-        }
-
-        /// <summary>
-        /// Puts this instance.
-        /// </summary>
-        /// <returns>HttpResponseMessage instance</returns>
-        public async Task<IHttpActionResult> Put()
-        {
-            return await this.GetResponse();
-        }
-
-        /// <summary>
-        /// Deletes this instance.
-        /// </summary>
-        /// <returns>HttpResponseMessage instance</returns>
-        public async Task<IHttpActionResult> Delete()
-        {
-            return await this.GetResponse();
-        }
-
-        /// <summary>
-        /// Helper method to create response
-        /// </summary>
-        /// <returns>HttpResponseMessage instance</returns>
-        private async Task<ResponseMessageResult> GetResponse()
+        /// 
+       [AcceptVerbs(HttpMethodEnum.Delete, HttpMethodEnum.Get, HttpMethodEnum.Head, HttpMethodEnum.Options, HttpMethodEnum.Patch, HttpMethodEnum.Post, HttpMethodEnum.Put)]
+        public async Task<IHttpActionResult> Execute()
         {
             var resourceUri = this.Request.RequestUri.AbsolutePath.ToLower();
             var method = this.Request.Method.Method;
