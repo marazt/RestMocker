@@ -30,7 +30,7 @@ namespace RestMocker.Console
         /// <param name="e">The <see cref="UnhandledExceptionEventArgs"/> instance containing the event data.</param>
         static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            SimpleIocFactory.Instance.Logger.Fatal(string.Format("Fatal exception: {0}", e.ExceptionObject));
+            IocFactory.Instance.Logger.Fatal(string.Format("Fatal exception: {0}", e.ExceptionObject));
             System.Console.WriteLine("Sorry, there was a critical error, press eny key to exit");
             System.Console.ReadLine();
             Environment.Exit(1);

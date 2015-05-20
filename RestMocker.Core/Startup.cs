@@ -17,7 +17,8 @@ namespace RestMocker.Core
         /// <param name="app">The application.</param>
         public void Configuration(IAppBuilder app)
         {
-            var config = SimpleIocFactory.Instance.HttpConfiguration;
+            var config = IocFactory.Instance.HttpConfiguration;
+            var logger = IocFactory.Instance.Logger;
 
             //Config controller
             config.Routes.MapHttpRoute(
@@ -27,19 +28,19 @@ namespace RestMocker.Core
             );
 
             const string configurationFile = "Configuration/config.json";
-            SimpleIocFactory.Instance.Logger.Info("Loading configuration from '{0}'", configurationFile);
+            logger.Info("Loading configuration from '{0}'", configurationFile);
             try
             {
-                SimpleIocFactory.Instance.Configuration.LoadConfiguration(configurationFile);
+                IocFactory.Instance.Configuration.LoadConfiguration(configurationFile);
                 config.Filters.Add(new ExceptionHandlingAttribute());
             }
             catch (Exception ex)
             {
-                SimpleIocFactory.Instance.Logger.ErrorException("Error while loading configuration", ex);
+                logger.ErrorException("Error while loading configuration", ex);
                 throw ex;
             }
 
-            SimpleIocFactory.Instance.Logger.Info("Configuration loaded");
+            logger.Info("Configuration loaded");
             app.UseWebApi(config);
         }
     }

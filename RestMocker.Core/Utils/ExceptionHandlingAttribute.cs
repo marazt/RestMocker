@@ -13,7 +13,7 @@ namespace RestMocker.Core.Utils
         public override void OnException(HttpActionExecutedContext context)
         {
             //Log Critical errors
-            SimpleIocFactory.Instance.Logger.ErrorException("Appliction Exception", context.Exception);
+            IocFactory.Instance.Logger.ErrorException("Appliction Exception", context.Exception);
 
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
             {

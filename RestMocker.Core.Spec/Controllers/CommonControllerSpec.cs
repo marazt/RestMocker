@@ -157,7 +157,7 @@ namespace RestMocker.Core.Spec.Controllers
         /// </summary>
         private void SetConfigurations()
         {
-            var confMock = new ConfigurationService(new HttpConfiguration());
+            var confMock = new ConfigurationService(new NullLogger(), new HttpConfiguration());
             confMock.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Get,
@@ -244,7 +244,7 @@ namespace RestMocker.Core.Spec.Controllers
             }
             });
 
-            SimpleIocFactory.Instance.Configuration = confMock;
+            IocFactory.Instance.Register<IConfigurationService, ConfigurationService>(confMock);
         }
 
         /// <summary>

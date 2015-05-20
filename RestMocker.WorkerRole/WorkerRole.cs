@@ -31,7 +31,7 @@ namespace RestMocker.WorkerRole
         public override void Run()
         {
 
-            SimpleIocFactory.Instance.Logger.Info("Running worker");
+            IocFactory.Instance.Logger.Info("Running worker");
 
             try
             {
@@ -58,7 +58,7 @@ namespace RestMocker.WorkerRole
             var endpoint = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints["WebEndpoint"];
             var baseUri = String.Format("{0}://{1}", endpoint.Protocol, endpoint.IPEndpoint);
 
-            SimpleIocFactory.Instance.Logger.Info("Starting OWIN at {0}", baseUri);
+            IocFactory.Instance.Logger.Info("Starting OWIN at {0}", baseUri);
 
 
             this.app = WebApp.Start<Startup>(new StartOptions(url: baseUri));
@@ -71,7 +71,7 @@ namespace RestMocker.WorkerRole
         /// </summary>
         public override void OnStop()
         {
-            SimpleIocFactory.Instance.Logger.Info("RestMockerWorkerRole is stopping");
+            IocFactory.Instance.Logger.Info("RestMockerWorkerRole is stopping");
 
             this.cancellationTokenSource.Cancel();
             this.runCompleteEvent.WaitOne();
@@ -85,7 +85,7 @@ namespace RestMocker.WorkerRole
             base.OnStop();
 
 
-            SimpleIocFactory.Instance.Logger.Info("RestMockerWorkerRole has stopped");
+            IocFactory.Instance.Logger.Info("RestMockerWorkerRole has stopped");
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Net;
 using System.Web.Http;
 using FluentAssertions;
 using Newtonsoft.Json;
+using NLog;
 using RestMocker.Core.Models;
 using RestMocker.Core.Services;
 using RestMocker.Model;
@@ -18,7 +19,7 @@ namespace RestMocker.Core.Spec.Services
 
         public ConfigurationServiceSpec()
         {
-            this.testee = new ConfigurationService(new HttpConfiguration());
+            this.testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
         }
 
         [Fact]

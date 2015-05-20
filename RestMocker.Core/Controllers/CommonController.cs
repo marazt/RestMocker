@@ -27,7 +27,7 @@ namespace RestMocker.Core.Controllers
         {
             var resourceUri = this.Request.RequestUri.AbsolutePath.ToLower();
             var method = this.Request.Method.Method;
-            var conf = SimpleIocFactory.Instance.Configuration.GetConfigurationByResource(resourceUri, method);
+            var conf = IocFactory.Instance.Configuration.GetConfigurationByResource(resourceUri, method);
 
             if (conf == null)
             {

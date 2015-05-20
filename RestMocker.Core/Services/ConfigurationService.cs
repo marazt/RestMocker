@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Routing;
 using Newtonsoft.Json;
+using Ninject.Extensions.Logging;
 using RestMocker.Model;
 
 namespace RestMocker.Core.Services
@@ -27,8 +27,9 @@ namespace RestMocker.Core.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService"/> class.
         /// </summary>
-        public ConfigurationService(HttpConfiguration httpConfiguration)
+        public ConfigurationService(ILogger logger, HttpConfiguration httpConfiguration)
         {
+            this.logger = logger;
             this.HttpConfiguration = httpConfiguration;
             this.Configurations = new List<JsonConfigurationItem>();
         }
@@ -36,6 +37,12 @@ namespace RestMocker.Core.Services
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// logger
+        /// </summary>
+        private readonly ILogger logger;
+
         /// <summary>
         /// Gets the configurations.
         /// </summary>
@@ -64,7 +71,7 @@ namespace RestMocker.Core.Services
         {
             if (!File.Exists(configurationFilePath))
             {
-                SimpleIocFactory.Instance.Logger.Warn("Configuration file '{0}' not found", configurationFilePath);
+               this.logger.Warn("Configuration file '{0}' not found", configurationFilePath);
                 return;
             }
 

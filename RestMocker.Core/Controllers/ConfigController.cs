@@ -32,7 +32,7 @@ namespace RestMocker.Core.Controllers
         [AcceptVerbs(HttpMethodEnum.Get)]
         public async Task<IHttpActionResult> GetConfiguration()
         {
-            var conf = JsonConvert.SerializeObject(SimpleIocFactory.Instance.Configuration.GetConfiguration(), Formatting.Indented);
+            var conf = JsonConvert.SerializeObject(IocFactory.Instance.Configuration.GetConfiguration(), Formatting.Indented);
             var response = new HttpResponseMessage
             {
                 Content = new StringContent(conf, Encoding.UTF8, ContentTypeJson),
@@ -50,7 +50,7 @@ namespace RestMocker.Core.Controllers
         [AcceptVerbs(HttpMethodEnum.Post)]
         public async Task<IHttpActionResult> PostConfiguration([FromBody]IEnumerable<JsonConfigurationItem> configuration)
         {
-            SimpleIocFactory.Instance.Configuration.SetConfiguration(configuration);
+            IocFactory.Instance.Configuration.SetConfiguration(configuration);
             return Ok();
         }
 
