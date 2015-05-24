@@ -1,7 +1,7 @@
 RestMocker
 ==================
 
-Version 1.0.2
+Version 1.0.3
 
 Author marazt
 
@@ -9,11 +9,17 @@ Copyright marazt
 
 License The MIT License (MIT)
 
-Last updated 21 May 2015
+Last updated 24 May 2015
 
 
 Versions
 -----------------
+
+**1.0.3 - 2015/05/24**
+
+* Fix of the IoC configuration.
+
+
 
 **1.0.2 - 2015/05/21**
 

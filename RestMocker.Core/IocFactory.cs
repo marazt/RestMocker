@@ -7,8 +7,7 @@ using RestMocker.Core.Services;
 namespace RestMocker.Core
 {
     /// <summary>
-    /// Simple IoC Factory (instance holder) isntead of using complex IoCs like Castle or Unity
-    /// Can be replaced in the future, but now it is not needed :)
+    /// IoC Factory
     /// </summary>
     public class IocFactory
     {
@@ -80,7 +79,7 @@ namespace RestMocker.Core
             var settings = new NinjectSettings() { LoadExtensions = false };
             this.container = new StandardKernel(settings, new NLogModule());
             this.container.Bind<HttpConfiguration>().To<HttpConfiguration>().InSingletonScope();
-            this.container.Bind<IConfigurationService>().To<ConfigurationService>();
+            this.container.Bind<IConfigurationService>().To<ConfigurationService>().InSingletonScope();
         }
 
         /// <summary>
