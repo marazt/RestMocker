@@ -27,7 +27,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Get()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
@@ -46,7 +46,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Post()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.InternalServerError);
@@ -65,7 +65,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Patch()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.InternalServerError);
@@ -84,7 +84,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Put()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.BadRequest);
@@ -103,7 +103,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Delete()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Accepted);
@@ -123,7 +123,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Head()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
@@ -143,7 +143,7 @@ namespace RestMocker.Core.Spec.Controllers
             this.SetConfigurations();
 
             // Act
-            var response = ((controller.Execute()).Result as ResponseMessageResult).Response;
+            var response = ((controller.Options()).Result as ResponseMessageResult).Response;
 
             // Assert
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);

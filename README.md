@@ -1,7 +1,7 @@
 RestMocker
 ==================
 
-Version 1.0.3
+Version 1.0.4
 
 Author marazt
 
@@ -9,11 +9,18 @@ Copyright marazt
 
 License The MIT License (MIT)
 
-Last updated 24 May 2015
+Last updated 16 June 2015
 
 
 Versions
 -----------------
+
+**1.0.4 - 2015/06/16**
+
+* Added new configuration property "RandomDelay". Total delay is not counted in followingf way: TotalDelay = MinDelay + RandomDelay
+* Some little refactoring
+* Added support of **Swagger API documentation** on URI yourAppp/swagger/, e.g. http://localhost:8654/swagger/ui/index
+
 
 **1.0.3 - 2015/05/24**
 
@@ -78,6 +85,7 @@ RestMocker configuration will be following:
         "Resource": "/api/shop/orders/{orderId}",
         "Method": "get",
         "MinDelay": 0,
+		"RandomDelay": 1000,		
         "Response": {
             "Json": { "oderId": 3, "timestamp": "2025-03-02", "description": "some desc" },
             "Headers": {},
@@ -89,6 +97,7 @@ RestMocker configuration will be following:
         "Resource": "/api/shop/orders",
         "Method": "post",
         "MinDelay": 1000,
+		"RandomDelay": 5000,
         "Response": {
             "Json": { "oderId": 457, "timestamp": "2025-03-03", "description": "new item created" },
             "Headers": {},
@@ -100,6 +109,7 @@ RestMocker configuration will be following:
         "Resource": "/api/shop/orders/{orderId}",
         "Method": "delete",
         "MinDelay": 0,
+		"RandomDelay": 0,		
         "Response": {
             "Json": {},
             "Headers": {},
@@ -110,7 +120,8 @@ RestMocker configuration will be following:
         "Name": "orders-delete-fail",
         "Resource": "/api/shop/orders/346",
         "Method": "delete",
-        "MinDelay": 0,
+        "MinDelay": 2300,
+		"RandomDelay": 0,		
         "Response": {
             "Json": {},
             "Headers": {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:12.0)"},

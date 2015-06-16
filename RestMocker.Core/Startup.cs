@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Http;
 using Owin;
-using RestMocker.Core.Services;
 using RestMocker.Core.Utils;
+using Swashbuckle.Application;
 
 namespace RestMocker.Core
 {
@@ -19,6 +19,9 @@ namespace RestMocker.Core
         {
             var config = IocFactory.Instance.HttpConfiguration;
             var logger = IocFactory.Instance.Logger;
+
+            config.EnableSwagger(c => c.SingleApiVersion("v1", "RestMocker API"))
+                .EnableSwaggerUi();
 
             //Config controller
             config.Routes.MapHttpRoute(

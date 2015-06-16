@@ -15,6 +15,78 @@ namespace RestMocker.Core.Controllers
     {
         #region Methods
 
+
+        /// <summary>
+        /// Handles Delete method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Delete)]
+        public async Task<IHttpActionResult> Delete()
+        {
+            return await this.Execute();
+        }
+
+        /// <summary>
+        /// Handles Get method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Get)]
+        public async Task<IHttpActionResult> Get()
+        {
+            return await this.Execute();
+        }
+
+        /// <summary>
+        /// Handles Head method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Head)]
+        public async Task<IHttpActionResult> Head()
+        {
+            return await this.Execute();
+        }
+
+        /// <summary>
+        /// Handles Options method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Options)]
+        public async Task<IHttpActionResult> Options()
+        {
+            return await this.Execute();
+        }
+
+        /// <summary>
+        /// Handles PAtch method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Patch)]
+        public async Task<IHttpActionResult> Patch()
+        {
+            return await this.Execute();
+        }
+
+        /// <summary>
+        /// Handles Post method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Post)]
+        public async Task<IHttpActionResult> Post()
+        {
+            return await this.Execute();
+        }
+
+        /// <summary>
+        /// Handles Put method
+        /// </summary>
+        /// <returns>HttpResponseMessage instance</returns>
+        [AcceptVerbs(HttpMethodEnum.Put)]
+        public async Task<IHttpActionResult> Put()
+        {
+            return await this.Execute();
+        }
+
+
         /// <summary>
         /// Method which handles all incomming request and resolves which
         /// response will be returned to the client.
@@ -22,8 +94,7 @@ namespace RestMocker.Core.Controllers
         /// </summary>
         /// <returns>HttpResponseMessage instance</returns>
         /// 
-       [AcceptVerbs(HttpMethodEnum.Delete, HttpMethodEnum.Get, HttpMethodEnum.Head, HttpMethodEnum.Options, HttpMethodEnum.Patch, HttpMethodEnum.Post, HttpMethodEnum.Put)]
-        public async Task<IHttpActionResult> Execute()
+        private async Task<IHttpActionResult> Execute()
         {
             var resourceUri = this.Request.RequestUri.AbsolutePath.ToLower();
             var method = this.Request.Method.Method;

@@ -198,7 +198,7 @@ namespace RestMocker.Core.Services
             // set new
             foreach (var conf in this.Configurations)
             {
-                this.HttpConfiguration.Routes.MapHttpRoute(conf.Name, conf.Resource, defaults: new { controller = "Common", action = "Execute" });
+                this.HttpConfiguration.Routes.MapHttpRoute(conf.Name, conf.Resource, defaults: new { controller = "Common", action = conf.Method});
             }
         }
 
