@@ -30,7 +30,7 @@ Versions
 
 **1.0.2 - 2015/05/21**
 
-* Added Ninject IoC. I wanted to use Ninject OwinHost too, but there is a problem that after downloading these package, project needs tp reference System.Web because of routing - and this is bad. So it is done without is.
+* Added Ninject IoC. I wanted to use Ninject OwinHost too, but there is a problem that after downloading these package, project needs to reference System.Web because of routing - and this is bad.
 
 
 
