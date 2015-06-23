@@ -1,7 +1,7 @@
 RestMocker
 ==================
 
-Version 1.0.4
+Version 1.0.5
 
 Author marazt
 
@@ -9,17 +9,25 @@ Copyright marazt
 
 License The MIT License (MIT)
 
-Last updated 16 June 2015
+Last updated 23 June 2015
 
 
 Versions
 -----------------
+
+**1.0.5 - 2015/06/23**
+
+* Added new configuration property "DoNotRespond". Use this property if you don't want to return request response. Default value is 'false'.
+* Added model validation (WebApi ActionFilterAttribute)
+
+
 
 **1.0.4 - 2015/06/16**
 
 * Added new configuration property "RandomDelay". Total delay is not counted in followingf way: TotalDelay = MinDelay + RandomDelay
 * Some little refactoring
 * Added support of **Swagger API documentation** on URI yourAppp/swagger/, e.g. http://localhost:8654/swagger/ui/index
+
 
 
 **1.0.3 - 2015/05/24**
@@ -80,61 +88,69 @@ RestMocker configuration will be following:
 
 ```json
 [
-    {
-        "Name": "orders-get-by-id",
-        "Resource": "/api/shop/orders/{orderId}",
-        "Method": "get",
-        "MinDelay": 0,
+	{
+		"Name": "orders-get-by-id",
+		"Resource": "/api/shop/orders/{orderId}",
+		"Method": "get",
+		"MinDelay": 0,
 		"RandomDelay": 1000,		
-        "Response": {
-            "Json": { "oderId": 3, "timestamp": "2025-03-02", "description": "some desc" },
-            "Headers": {},
-            "StatusCode": 200
-        }
-    },
-    {
-        "Name": "orders-create-new",
-        "Resource": "/api/shop/orders",
-        "Method": "post",
-        "MinDelay": 1000,
+		"Response": {
+			"Json": { "oderId": 3, "timestamp": "2025-03-02", "description": "some desc" },
+			"Headers": {},
+			"StatusCode": 200
+		}
+	},
+	{
+		"Name": "orders-create-new",
+		"Resource": "/api/shop/orders",
+		"Method": "post",
+		"MinDelay": 1000,
 		"RandomDelay": 5000,
-        "Response": {
-            "Json": { "oderId": 457, "timestamp": "2025-03-03", "description": "new item created" },
-            "Headers": {},
-            "StatusCode": 201
-        }
-    },
-    {
-        "Name": "orders-delete",
-        "Resource": "/api/shop/orders/{orderId}",
-        "Method": "delete",
-        "MinDelay": 0,
+		"Response": {
+			"Json": { "oderId": 457, "timestamp": "2025-03-03", "description": "new item created" },
+			"Headers": {},
+			"StatusCode": 201
+		}
+	},
+	{
+		"Name": "orders-delete",
+		"Resource": "/api/shop/orders/{orderId}",
+		"Method": "delete",
+		"MinDelay": 0,
 		"RandomDelay": 0,		
-        "Response": {
-            "Json": {},
-            "Headers": {},
-            "StatusCode": 200
-        }
-    },
-    {
-        "Name": "orders-delete-fail",
-        "Resource": "/api/shop/orders/346",
-        "Method": "delete",
-        "MinDelay": 2300,
+		"Response": {
+			"Json": {},
+			"Headers": {},
+			"StatusCode": 200
+		}
+	},
+	{
+		"Name": "orders-delete-fail",
+		"Resource": "/api/shop/orders/346",
+		"Method": "delete",
+		"MinDelay": 2300,
 		"RandomDelay": 0,		
-        "Response": {
-            "Json": {},
-            "Headers": {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:12.0)"},
-            "StatusCode": 403
-        }
-    }
+		"Response": {
+			"Json": {},
+			"Headers": {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:12.0)"},
+			"StatusCode": 403
+		}
+	},
+	 {
+		 "Name": "orders-get-nothing",
+		 "Resource": "/api/shop/orders/500",
+		 "Method": "get",
+		 "DoNotRespond": true
+	 }
 ]
 ```
 The configuration behaves as follows:
 
  1. Resource **orders-get-by-id** returns for every request on any **orderId** the same response as defined. It is because the resource contains '*generic*' **{orderId}**
  2. Resource **orders-create-new** returns for every request the same response with information that order was successfully created and as JSON data it sends new created order item. The minimal response of this request is set to 500 miliseconds.
- 3. Request **orders-delete** returns successful request for every orderId except **346** - it is because the fourth configuration **orders-delete-fail** handles deletion of the order with this **orderId**. It means that **orders-delete-fail** has priority before **orders-delete** request.
+ 3. Resource **orders-delete** returns successful request for every orderId except **346** - it is because the fourth configuration **orders-delete-fail** handles deletion of the order with this **orderId**. It means that **orders-delete-fail** has priority before **orders-delete** request.
+ 4. Resource **orders-delete-fail** returns HTTP code 403 after at least 2300 ms
+ 5. Resource **orders-get-nothing** does not return anything
 
 **Note 1:** *Name* of the resource must be unique
 
@@ -164,11 +180,11 @@ You can specify a concrete host and port in **RestMocker.Console.vshost.exe.conf
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <startup>
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.1" />
+	<supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.1" />
   </startup>
   <appSettings>
-    <add key="port" value="8654" />
-    <add key="host" value="http://localhost" />
+	<add key="port" value="8654" />
+	<add key="host" value="http://localhost" />
   </appSettings>
 </configuration>
 ```

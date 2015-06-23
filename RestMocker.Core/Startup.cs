@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using Owin;
+using RestMocker.Core.Services;
 using RestMocker.Core.Utils;
 using Swashbuckle.Application;
 
@@ -36,6 +37,7 @@ namespace RestMocker.Core
             {
                 IocFactory.Instance.Configuration.LoadConfiguration(configurationFile);
                 config.Filters.Add(new ExceptionHandlingAttribute());
+                config.Filters.Add(new ValidateModelAttribute());
             }
             catch (Exception ex)
             {

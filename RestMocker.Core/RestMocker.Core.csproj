@@ -91,6 +91,7 @@
     <Compile Include="IocFactory.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\ExceptionHandlingAttribute.cs" />
+    <Compile Include="Utils\ValidateModelAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

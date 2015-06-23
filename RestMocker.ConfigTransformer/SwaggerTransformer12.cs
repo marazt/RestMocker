@@ -43,6 +43,8 @@ namespace RestMocker.ConfigTransformer
                         Name = path,
                         Resource = string.Format("{0}{1}", basePath, path),
                         MinDelay = 0,
+                        RandomDelay = 0,
+                        DoNotRespond = false,
                         Method = operation["method"].Value<string>(),
                         Response = new ResponseItem()
                     };
@@ -54,7 +56,7 @@ namespace RestMocker.ConfigTransformer
 
             using (var stream = new StreamWriter(targetPath))
             {
-                stream.WriteLine(JsonConvert.SerializeObject(jsonConfigs,Formatting.Indented));
+                stream.WriteLine(JsonConvert.SerializeObject(jsonConfigs, Formatting.Indented));
             }
         }
     }

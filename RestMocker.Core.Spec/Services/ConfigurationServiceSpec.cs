@@ -4,7 +4,6 @@ using System.Net;
 using System.Web.Http;
 using FluentAssertions;
 using Newtonsoft.Json;
-using NLog;
 using RestMocker.Core.Models;
 using RestMocker.Core.Services;
 using RestMocker.Model;
@@ -34,15 +33,15 @@ namespace RestMocker.Core.Spec.Services
             //Assert
             var configuration = this.testee.GetConfiguration();
             configuration.Count.Should().Be(3);
-            this.TestData(configuration[0], "test1", "test1/data", HttpMethodEnum.Get, 0,
+            this.TestData(configuration[0], "test1", "test1/data", HttpMethodEnum.Get, 0, 23,
                 new Dictionary<string, string> { { "response", "Hi 1!" } },
                 new Dictionary<string, string> { { "header1", "value1" } }, HttpStatusCode.OK);
 
-            this.TestData(configuration[1], "test2", "test2/bagr", HttpMethodEnum.Get, 5,
+            this.TestData(configuration[1], "test2", "test2/bagr", HttpMethodEnum.Get, 5, 2,
                 new Dictionary<string, string> { { "response", "Hi 2!" } },
                 new Dictionary<string, string> { { "header2", "value2" } }, HttpStatusCode.OK);
 
-            this.TestData(configuration[2], "test3", "test3/items", HttpMethodEnum.Post, 2,
+            this.TestData(configuration[2], "test3", "test3/items", HttpMethodEnum.Post, 2, 0,
                 new Dictionary<string, string> { { "response", "Hi 3!" } },
                 new Dictionary<string, string> { { "header1", "value1" }, { "header3", "value3" } }, HttpStatusCode.NotFound);
 
@@ -66,7 +65,7 @@ namespace RestMocker.Core.Spec.Services
         }
 
         [Fact]
-        public void ShouldLoadConfigurationWithoutResponseThrowsJsonSerializationException()
+        public void ShouldLoadConfigurationWithoutMethodThrowsJsonSerializationException()
         {
             //Arrnage
             const string path = "config2.json";
@@ -94,18 +93,24 @@ namespace RestMocker.Core.Spec.Services
         }
 
         [Fact]
+        public void ShouldLoadConfigurationWhisShouldNotRespond()
+        {
+            //Arrnage
+            const string path = "config4.json";
+
+            //Act
+            testee.LoadConfiguration(path);
+
+            //Assert
+            this.testee.HttpConfiguration.Routes.Count.Should().Be(1);
+        }
+
+        [Fact]
         public void ShouldGetConfigurationByResourceWithNotNullResource()
         {
             //Arrnage
             const string resource = "test/resource";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
-                                      {
-                                          Method = HttpMethodEnum.Delete,
-                                          MinDelay = 645,
-                                          Name = "SomeName",
-                                          Resource = resource,
-                                          Response = new ResponseItem()
-                                      }});
+            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Delete, resource) });
 
             //Act
             var expected = this.testee.GetConfigurationByResource("/" + resource, HttpMethodEnum.Delete);
@@ -120,14 +125,7 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/resource";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
-            {
-                Method = HttpMethodEnum.Delete,
-                MinDelay = 645,
-                Name = "SomeName",
-                Resource = resource,
-                Response = new ResponseItem()
-            }});
+            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Delete, resource) });
 
             //Act
             var expected = this.testee.GetConfigurationByResource("/" + resource, HttpMethodEnum.Post);
@@ -142,14 +140,7 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/{resource}";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
-            {
-                Method = HttpMethodEnum.Post,
-                MinDelay = 645,
-                Name = "SomeName",
-                Resource = resource,
-                Response = new ResponseItem()
-            }});
+            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Post, resource) });
 
             //Act
             var expected = this.testee.GetConfigurationByResource("/" + "test/bagr", HttpMethodEnum.Post);
@@ -165,14 +156,7 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/resource";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
-            {
-                Method = HttpMethodEnum.Get,
-                MinDelay = 645,
-                Name = "SomeName",
-                Resource = resource,
-                Response = new ResponseItem()
-            }});
+            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Get, resource) });
 
             //Act
             var expected = this.testee.GetConfigurationByResource("/dummy", HttpMethodEnum.Get);
@@ -190,6 +174,7 @@ namespace RestMocker.Core.Spec.Services
             {
                 Method = HttpMethodEnum.Delete,
                 MinDelay = 645,
+                RandomDelay = 234,
                 Name = "Generic",
                 Resource = "test/{id}",
                 Response = new ResponseItem()
@@ -225,6 +210,7 @@ namespace RestMocker.Core.Spec.Services
             {
                 Method = HttpMethodEnum.Delete,
                 MinDelay = 645,
+                RandomDelay = 234,
                 Name = "Generic",
                 Resource = "test/{id}",
                 Response = new ResponseItem()
@@ -233,6 +219,7 @@ namespace RestMocker.Core.Spec.Services
             {
                 Method = HttpMethodEnum.Put,
                 MinDelay = 645,
+                RandomDelay = 234,
                 Name = "Concrete",
                 Resource = "test/78",
                 Response = new ResponseItem()
@@ -243,17 +230,31 @@ namespace RestMocker.Core.Spec.Services
             this.testee.HttpConfiguration.Routes.Count.Should().Be(2);
         }
 
-        private void TestData(JsonConfigurationItem item, string name, string resource, string method, int minDelay,
+        private void TestData(JsonConfigurationItem item, string name, string resource, string method, int minDelay, int randomDelay,
              Dictionary<string, string> json, Dictionary<string, string> headers, HttpStatusCode statusCode)
         {
             item.Name.Should().Be(name);
             item.Resource.Should().Be(resource);
             item.Method.Should().Be(method);
             item.MinDelay.Should().Be(minDelay);
+            item.RandomDelay.Should().Be(randomDelay);
             item.Response.Should().NotBeNull();
             item.Response.Json.ShouldBeEquivalentTo(json);
             item.Response.Headers.ShouldBeEquivalentTo(headers);
             item.Response.StatusCode.ShouldBeEquivalentTo(statusCode);
+        }
+
+        private JsonConfigurationItem CreateTestInstance(string method, string resource)
+        {
+            return new JsonConfigurationItem
+            {
+                Method = method,
+                MinDelay = 645,
+                RandomDelay = 234,
+                Name = "SomeName",
+                Resource = resource,
+                Response = new ResponseItem()
+            };
         }
 
     }

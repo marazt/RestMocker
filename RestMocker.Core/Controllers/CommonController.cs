@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -14,7 +16,6 @@ namespace RestMocker.Core.Controllers
     public class CommonController : ApiController
     {
         #region Methods
-
 
         /// <summary>
         /// Handles Delete method
@@ -108,6 +109,15 @@ namespace RestMocker.Core.Controllers
                 });
             }
 
+            if (conf.DoNotRespond)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("DoNotResponse is true"),
+                    ReasonPhrase = "DoNotResponse is true"
+                });
+            }
+
             var response = new HttpResponseMessage
             {
                 Content = new StringContent(JsonConvert.SerializeObject(conf.Response.Json)),
@@ -126,7 +136,17 @@ namespace RestMocker.Core.Controllers
                 }
             }
 
-            var delay = conf.MinDelay;
+            // set total delay == minDelay + randomDelay
+            var delay = 0;
+
+            if (conf.RandomDelay > 0)
+            {
+                var rnd = new Random();
+                delay = rnd.Next(0, conf.RandomDelay);
+            }
+
+            delay += conf.MinDelay;
+
             if (delay > 0)
             {
                 await Task.Delay(delay);

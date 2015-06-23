@@ -58,14 +58,27 @@ namespace RestMocker.Model
         public int MinDelay { get; set; }
 
         /// <summary>
+        /// Gets or sets the random delay of the response.
+        /// </summary>
+        /// <value>
+        /// The minimum delay.
+        /// </value>
+        [DefaultValue(0)]
+        [JsonProperty(Required = Required.Default)]
+        public int RandomDelay { get; set; }
+
+        /// <summary>
         /// Gets or sets the response.
         /// </summary>
         /// <value>
         /// The response.
         /// </value>
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(Required = Required.Default)]
         public ResponseItem Response { get; set; }
 
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.Default)]
+        public bool DoNotRespond { get; set; }
 
         #endregion Properties
 

@@ -4,6 +4,7 @@
         "Resource": "test1/data",
         "Method": "get",
         "MinDelay": 0,
+        "RandomDelay": 23,
         "Response": {
             "Json": { "response": "Hi 1!" },
             "Headers": { "header1": "value1" },
@@ -16,6 +17,7 @@
         "Resource": "test2/bagr",
         "Method": "get",
         "MinDelay": 5,
+        "RandomDelay": 2,
         "Response": {
             "Json": { "response": "Hi 2!" },
             "Headers": { "header2": "value2" },

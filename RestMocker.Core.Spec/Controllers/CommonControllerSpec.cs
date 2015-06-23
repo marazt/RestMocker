@@ -152,6 +152,21 @@ namespace RestMocker.Core.Spec.Controllers
             data.ShouldBeEquivalentTo(expectedData);
         }
 
+        [Fact]
+        public void ShouldTestThatResponseIsNotReturned()
+        {
+            // Arrange
+            const string url = "http://www.contoso.com/bagr";
+            var controller = this.GetTestController(url, HttpMethodEnum.Get);
+            this.SetConfigurations();
+
+            // Act
+            var fnc = new Action(() => { var result = (controller.Get()).Result; });
+
+            // Assert
+            fnc.ShouldThrow<AggregateException>();
+        }
+
         /// <summary>
         /// Helper method to mock configuration data
         /// </summary>
@@ -241,6 +256,13 @@ namespace RestMocker.Core.Spec.Controllers
                     Json = new Dictionary<string, string> { { "key", "654" } },
                     StatusCode = HttpStatusCode.OK
                 }
+            },
+            new JsonConfigurationItem
+            {
+                Method = HttpMethodEnum.Get,
+                Name = "NoResponseTest",
+                Resource = "bagr",
+                DoNotRespond = true
             }
             });
 
