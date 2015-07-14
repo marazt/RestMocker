@@ -12,6 +12,30 @@ License The MIT License (MIT)
 Last updated 23 June 2015
 
 
+About
+-----------------
+
+RestMocker is a simple server for mocking (simulating) REST APIs for your applications.
+It can be run on local machine as console application on it can be deployed into the Azure Cloud.
+
+Abilities
+-----------------
++ Run as **standalone server on local machine** (Standalone & OWIN)
++ Run as **standalone server in Azure as Worker Role** (Standalone & OWIN)
++ Written in **.NET WebApi2**
++ Easy to run
++ Easy to configure
++ Configuration via **configuration file**
++ Configuration via **configuration resource**
++ View of the configured API as Swagger spec (**{app_address}/swagger**, e.g. http://localhost:8654/swagger/ui/index)
++ Mocking of the **resource**, **response code**, **json data**
++ Possibility to set **response delay (random, total)** of the resource
++ Possibility to specify **concrete** or **generic** request
++ Generation of the configuration file from the **Swagger 1.2** JSON spec
++ Running on multiple platforms: **Windows** (.NET 4.5.1 needed), on **MacOS** and **Linux** (Mono 3.2.8 needed)
++ ...
+
+
 Versions
 -----------------
 
@@ -52,27 +76,6 @@ Versions
 **1.0.0 - 2015/04/29**
 
 * Initial version
-
-
-About
------------------
-
-RestMocker is a simple server for mocking (simulating) REST APIs for your applications.
-It can be run on local machine as console application on it can be deployed into the Azure Cloud.
-
-Abilities
------------------
-+ Run as **standalone server on local machine** (Standalone & OWIN)
-+ Run as **standalone server in Azure as Worker Role** (Standalone & OWIN)
-+ Written in **.NET WebApi2**
-+ Configuration via **configuration file**
-+ Configuration via **configuration resource**
-+ Mocking of the **resource**, **response code**, **json data**
-+ Possibility to set **response delay** of the resource
-+ Possibility to specify **concrete** or **generic** request
-+ Generation of the configuration file from the **Swagger 1.2** JSON spec
-+ Running on **Windows** (.NET 4.5.1 needed), on **MacOS** and **Linux** (Mono 3.2.8 needed)
-+ ...
 
 
 Example Configuration
