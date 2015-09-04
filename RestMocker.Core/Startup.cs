@@ -31,19 +31,10 @@ namespace RestMocker.Core
                 defaults: new { controller = "Config" }
             );
 
-            const string configurationFile = "Configuration/config.json";
-            logger.Info("Loading configuration from '{0}'", configurationFile);
-            try
-            {
-                IocFactory.Instance.Configuration.LoadConfiguration(configurationFile);
-                config.Filters.Add(new ExceptionHandlingAttribute());
-                config.Filters.Add(new ValidateModelAttribute());
-            }
-            catch (Exception ex)
-            {
-                logger.ErrorException("Error while loading configuration", ex);
-                throw ex;
-            }
+
+            config.Filters.Add(new ExceptionHandlingAttribute());
+            config.Filters.Add(new ValidateModelAttribute());
+
 
             logger.Info("Configuration loaded");
             app.UseWebApi(config);

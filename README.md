@@ -1,7 +1,7 @@
 RestMocker
 ==================
 
-Version 1.0.5
+Version 1.0.6
 
 Author marazt
 
@@ -9,7 +9,7 @@ Copyright marazt
 
 License The MIT License (MIT)
 
-Last updated 23 June 2015
+Last updated 04 September 2015
 
 
 About
@@ -38,6 +38,12 @@ Abilities
 
 Versions
 -----------------
+
+**1.0.6 - 2015/09/07**
+
+* Update of the IConfigurationService. Get rid of method for loading configuration to have better interface for other services, e.g. db, other API, etc. Not only configuration from file.
+
+
 
 **1.0.5 - 2015/06/23**
 

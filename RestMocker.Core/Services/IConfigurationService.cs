@@ -18,12 +18,6 @@ namespace RestMocker.Core.Services
         void SetConfiguration(IEnumerable<JsonConfigurationItem> configuration);
 
         /// <summary>
-        /// Loads the configuration.
-        /// </summary>
-        /// <param name="configurationFilePath">The configuration file path.</param>
-        void LoadConfiguration(string configurationFilePath);
-
-        /// <summary>
         /// Gets the configuration by resource.
         /// </summary>
         /// <param name="resource">The resource.</param>

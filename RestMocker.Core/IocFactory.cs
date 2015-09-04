@@ -2,6 +2,7 @@
 using Ninject;
 using Ninject.Extensions.Logging;
 using Ninject.Extensions.Logging.NLog3;
+using Ninject.Parameters;
 using RestMocker.Core.Services;
 
 namespace RestMocker.Core
@@ -79,7 +80,10 @@ namespace RestMocker.Core
             var settings = new NinjectSettings() { LoadExtensions = false };
             this.container = new StandardKernel(settings, new NLogModule());
             this.container.Bind<HttpConfiguration>().To<HttpConfiguration>().InSingletonScope();
-            this.container.Bind<IConfigurationService>().To<ConfigurationService>().InSingletonScope();
+            this.container.Bind<IConfigurationService>()
+                .To<ConfigurationService>()
+                .InSingletonScope()
+                .WithConstructorArgument(new ConstructorArgument("configurationFile", "Configuration/config.json"));
         }
 
         /// <summary>

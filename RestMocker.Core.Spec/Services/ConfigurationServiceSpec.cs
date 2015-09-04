@@ -14,24 +14,17 @@ namespace RestMocker.Core.Spec.Services
 
     public class ConfigurationServiceSpec
     {
-        private ConfigurationService testee;
-
-        public ConfigurationServiceSpec()
-        {
-            this.testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
-        }
 
         [Fact]
         public void ShouldLoadFullConfigurationWithSuccess()
         {
             //Arrnage
             const string path = "config1.json";
-
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration(), path);
             //Act
-            testee.LoadConfiguration(path);
 
             //Assert
-            var configuration = this.testee.GetConfiguration();
+            var configuration = testee.GetConfiguration();
             configuration.Count.Should().Be(3);
             this.TestData(configuration[0], "test1", "test1/data", HttpMethodEnum.Get, 0, 23,
                 new Dictionary<string, string> { { "response", "Hi 1!" } },
@@ -45,7 +38,7 @@ namespace RestMocker.Core.Spec.Services
                 new Dictionary<string, string> { { "response", "Hi 3!" } },
                 new Dictionary<string, string> { { "header1", "value1" }, { "header3", "value3" } }, HttpStatusCode.NotFound);
 
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(3);
+            testee.HttpConfiguration.Routes.Count.Should().Be(3);
 
         }
 
@@ -54,14 +47,15 @@ namespace RestMocker.Core.Spec.Services
         {
             // Arrange
             const string path = "nonExistingConfig.config";
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration(), path);
 
             // Act
             testee.GetConfiguration().Count.ShouldBeEquivalentTo(0);
-            testee.LoadConfiguration(path);
+
 
             // Assert
             testee.GetConfiguration().Count.ShouldBeEquivalentTo(0);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(0);
+            testee.HttpConfiguration.Routes.Count.Should().Be(0);
         }
 
         [Fact]
@@ -69,13 +63,13 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string path = "config2.json";
+            ConfigurationService testee = null;
 
             //Act
-            Action fnc = () => testee.LoadConfiguration(path);
+            Action fnc = () => { testee = new ConfigurationService(new NullLogger(), new HttpConfiguration(), path); };
 
             //Assert
             fnc.ShouldThrow<JsonSerializationException>();
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(0);
         }
 
         [Fact]
@@ -83,26 +77,26 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string path = "config3.json";
+            ConfigurationService testee = null;
 
             //Act
-            Action fnc = () => testee.LoadConfiguration(path);
+            Action fnc = () => { testee = new ConfigurationService(new NullLogger(), new HttpConfiguration(), path); };
 
             //Assert
             fnc.ShouldThrow<JsonSerializationException>();
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(0);
         }
 
         [Fact]
-        public void ShouldLoadConfigurationWhisShouldNotRespond()
+        public void ShouldLoadConfigurationWhichShouldNotRespond()
         {
             //Arrnage
             const string path = "config4.json";
 
             //Act
-            testee.LoadConfiguration(path);
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration(), path);
 
             //Assert
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(1);
+            testee.HttpConfiguration.Routes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -110,13 +104,14 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/resource";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Delete, resource) });
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
+            testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Delete, resource) });
 
             //Act
-            var expected = this.testee.GetConfigurationByResource("/" + resource, HttpMethodEnum.Delete);
+            var expected = testee.GetConfigurationByResource("/" + resource, HttpMethodEnum.Delete);
 
             //Assert
-            this.testee.GetConfiguration().Count.Should().Be(1);
+            testee.GetConfiguration().Count.Should().Be(1);
             expected.Should().NotBeNull();
         }
 
@@ -125,14 +120,15 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/resource";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Delete, resource) });
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
+            testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Delete, resource) });
 
             //Act
-            var expected = this.testee.GetConfigurationByResource("/" + resource, HttpMethodEnum.Post);
+            var expected = testee.GetConfigurationByResource("/" + resource, HttpMethodEnum.Post);
 
             //Assert
-            this.testee.GetConfiguration().Count.Should().Be(1);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(1);
+            testee.GetConfiguration().Count.Should().Be(1);
+            testee.HttpConfiguration.Routes.Count.Should().Be(1);
             expected.Should().BeNull();
         }
 
@@ -140,14 +136,15 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/{resource}";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Post, resource) });
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
+            testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Post, resource) });
 
             //Act
-            var expected = this.testee.GetConfigurationByResource("/" + "test/bagr", HttpMethodEnum.Post);
+            var expected = testee.GetConfigurationByResource("/" + "test/bagr", HttpMethodEnum.Post);
 
             //Assert
-            this.testee.GetConfiguration().Count.Should().Be(1);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(1);
+            testee.GetConfiguration().Count.Should().Be(1);
+            testee.HttpConfiguration.Routes.Count.Should().Be(1);
             expected.Should().NotBeNull();
         }
 
@@ -156,21 +153,24 @@ namespace RestMocker.Core.Spec.Services
         {
             //Arrnage
             const string resource = "test/resource";
-            this.testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Get, resource) });
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
+            testee.SetConfiguration(new List<JsonConfigurationItem> { this.CreateTestInstance(HttpMethodEnum.Get, resource) });
 
             //Act
-            var expected = this.testee.GetConfigurationByResource("/dummy", HttpMethodEnum.Get);
+            var expected = testee.GetConfigurationByResource("/dummy", HttpMethodEnum.Get);
 
             //Assert
-            this.testee.GetConfiguration().Count.Should().Be(1);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(1);
+            testee.GetConfiguration().Count.Should().Be(1);
+            testee.HttpConfiguration.Routes.Count.Should().Be(1);
             expected.Should().BeNull();
         }
 
         public void ShouldGetConfigurationByResourceByConcreteResourceWhenGenericResourceIsDefinedToo()
         {
             //Arrnage
-            this.testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
+
+            testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Delete,
                 MinDelay = 645,
@@ -190,11 +190,11 @@ namespace RestMocker.Core.Spec.Services
 
 
             //Act
-            var expected = this.testee.GetConfigurationByResource("test/78", HttpMethodEnum.Put);
+            var expected = testee.GetConfigurationByResource("test/78", HttpMethodEnum.Put);
 
             //Assert
-            this.testee.GetConfiguration().Count.Should().Be(2);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(2);
+            testee.GetConfiguration().Count.Should().Be(2);
+            testee.HttpConfiguration.Routes.Count.Should().Be(2);
             expected.Name.Should().Be("Concrete");
             expected.Should().NotBeNull();
         }
@@ -203,10 +203,12 @@ namespace RestMocker.Core.Spec.Services
         public void ShouldSetAndGetConfiguration()
         {
             //Arrnage
+            var testee = new ConfigurationService(new NullLogger(), new HttpConfiguration());
+
             //Act
-            this.testee.GetConfiguration().Count.Should().Be(0);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(0);
-            this.testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
+            testee.GetConfiguration().Count.Should().Be(0);
+            testee.HttpConfiguration.Routes.Count.Should().Be(0);
+            testee.SetConfiguration(new List<JsonConfigurationItem>{new JsonConfigurationItem
             {
                 Method = HttpMethodEnum.Delete,
                 MinDelay = 645,
@@ -226,8 +228,8 @@ namespace RestMocker.Core.Spec.Services
             }});
 
             //Assert
-            this.testee.GetConfiguration().Count.Should().Be(2);
-            this.testee.HttpConfiguration.Routes.Count.Should().Be(2);
+            testee.GetConfiguration().Count.Should().Be(2);
+            testee.HttpConfiguration.Routes.Count.Should().Be(2);
         }
 
         private void TestData(JsonConfigurationItem item, string name, string resource, string method, int minDelay, int randomDelay,

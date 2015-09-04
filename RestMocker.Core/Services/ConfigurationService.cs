@@ -27,11 +27,27 @@ namespace RestMocker.Core.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService"/> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="httpConfiguration">The HTTP configuration.</param>
         public ConfigurationService(ILogger logger, HttpConfiguration httpConfiguration)
+            : this(logger, httpConfiguration, null){}
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="httpConfiguration">The HTTP configuration.</param>
+        /// <param name="configurationFile">The configuration file.</param>
+        public ConfigurationService(ILogger logger, HttpConfiguration httpConfiguration, string configurationFile)
         {
             this.logger = logger;
             this.HttpConfiguration = httpConfiguration;
             this.Configurations = new List<JsonConfigurationItem>();
+            if (configurationFile != null)
+            {
+                this.LoadConfiguration(configurationFile);
+            }
         }
 
         #endregion Constructors
@@ -67,7 +83,7 @@ namespace RestMocker.Core.Services
         /// Loads the configuration.
         /// </summary>
         /// <param name="configurationFilePath">The configuration file path.</param>
-        public void LoadConfiguration(string configurationFilePath)
+        private void LoadConfiguration(string configurationFilePath)
         {
             if (!File.Exists(configurationFilePath))
             {
