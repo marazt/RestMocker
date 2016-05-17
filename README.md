@@ -9,7 +9,7 @@ Copyright marazt
 
 License The MIT License (MIT)
 
-Last updated 04 September 2015
+Last updated 10 May 2016
 
 
 About
@@ -38,6 +38,12 @@ Abilities
 
 Versions
 -----------------
+
+**1.0.7 - 2015/05/10**
+
+* Update of Azure Tools to v2.8.
+
+
 
 **1.0.6 - 2015/09/07**
 
